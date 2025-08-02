@@ -1,9 +1,14 @@
-import Dashboard from "./Dashboard";
+import Dashboard from "./pages/Dashboard";
+import SIgnup from "./pages/SIgnup";
 
 
 const App = () => {
   return (
-   <Dashboard/>
+    <div>
+
+      <Dashboard/>
+      <SIgnup/>
+    </div>
   );
 };
 

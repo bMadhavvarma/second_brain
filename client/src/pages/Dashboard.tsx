@@ -1,10 +1,10 @@
 import { useState } from "react";
-import AddContent from "./components/AddContent";
-import Button from "./components/Button";
-import Card from "./components/Card";
-import PlusIcon from "./Icons/PlusIcon";
-import ShareIcon from "./Icons/ShareIcon";
-import Sidebar from "./components/Sidebar";
+import AddContent from "../components/AddContent";
+import Button from "../components/Button";
+import Card from "../components/Card";
+import PlusIcon from "../Icons/PlusIcon";
+import ShareIcon from "../Icons/ShareIcon";
+import Sidebar from "../components/Sidebar";
 
 const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
