@@ -10,10 +10,10 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-// Connect to the database
+
 connectDB();
 
-// Routes
+
 app.use('/api/v1', authRoutes);
 
 app.listen(PORT, () => {
