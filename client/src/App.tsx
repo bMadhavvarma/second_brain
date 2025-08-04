@@ -1,14 +1,18 @@
+import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import SIgnup from "./pages/SIgnup";
+import SignupForm from "./pages/SignupForm";
+import SigninForm from "./pages/SigninForm";
+
 
 
 const App = () => {
   return (
-    <div>
+   <Routes>
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/signin" element={<SigninForm />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
-      <Dashboard/>
-      <SIgnup/>
-    </div>
+   </Routes>
   );
 };
 
