@@ -247,19 +247,18 @@ router.get("/brain/:shareLink", (req, res) => __awaiter(void 0, void 0, void 0, 
     // Find the link using the provided hash.
     const link = yield Link_1.LinkModel.findOne({ hash });
     if (!link) {
-        res.status(404).json({ message: "Invalid share link" }); // Send error if not found.
+        res.status(404).json({ message: "Invalid share link" });
         return;
     }
-    // Fetch content and user details for the shareable link.
     const content = yield Content_1.Content.find({ userId: link.userId });
     const user = yield User_1.default.findOne({ _id: link.userId });
     if (!user) {
-        res.status(404).json({ message: "User not found" }); // Handle missing user case.
+        res.status(404).json({ message: "User not found" });
         return;
     }
     res.json({
         username: user.userName,
         content
-    }); // Send user and content details in response.
+    });
 }));
 exports.default = router;
