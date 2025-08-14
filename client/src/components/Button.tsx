@@ -2,14 +2,16 @@ import type { ReactElement } from "react";
 
 interface ButtonProps {
   text: string;
-  startIcon: ReactElement;
-  varient: "primary" | "secondary";
+  startIcon?: ReactElement;
+  varient: "primary" | "secondary"|"danger";
   onClick?: () => void;
 }
 
 const variantProps = {
   primary: "bg-blue-700 text-white hover:bg-blue-800",
   secondary: "bg-blue-200 text-blue-700 hover:bg-blue-300",
+  danger:"bg-red-200 text-red-700 hover:bg-red-300"
+
 };
 
 const defaultStyles =

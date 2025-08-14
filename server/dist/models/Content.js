@@ -5,17 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tag = exports.Content = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const contentType = ['image', 'video', 'audio', 'article'];
+const contentType = ['image', 'note', 'video', 'audio', 'article', 'youtube', 'twitter', 'facebook'];
 const ContentSchema = new mongoose_1.default.Schema({
     title: {
-        type: 'string',
+        type: String, // fixed: should be String, not 'string'
         required: true,
     },
     link: {
-        type: 'string',
+        type: String,
     },
     type: {
-        type: 'string',
+        type: String,
         enum: contentType,
         required: true,
     },
@@ -29,11 +29,11 @@ const ContentSchema = new mongoose_1.default.Schema({
         ref: 'User',
         required: true,
     }
-});
-const tagSchema = new mongoose_1.default.Schema({
+}, { timestamps: true }); // <-- Adds createdAt & updatedAt automatically
+const TagSchema = new mongoose_1.default.Schema({
     title: { type: String, required: true, unique: true, trim: true }
-});
-const Tag = mongoose_1.default.model('Tag', tagSchema);
+}, { timestamps: true }); // Optional: if you also want createdAt for tags
+const Tag = mongoose_1.default.model('Tag', TagSchema);
 exports.Tag = Tag;
 const Content = mongoose_1.default.model('Content', ContentSchema);
 exports.Content = Content;

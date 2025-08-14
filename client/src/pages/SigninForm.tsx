@@ -2,7 +2,7 @@ import { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { FaSignInAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 const SigninForm = () => {
@@ -91,10 +91,17 @@ const SigninForm = () => {
               text={loading ? "Signing In..." : "Sign In"}
               varient="primary"
               startIcon={<FaSignInAlt />}
-              
             />
           </div>
         </form>
+
+        {/* Add link to sign up */}
+        <p className="text-center text-sm mt-4">
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-blue-600 hover:underline">
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import AddContent from "../components/AddContent";
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -9,37 +10,49 @@ import Sidebar from "../components/Sidebar";
 const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
- const [name, setName] = useState("");
+  const [name, setName] = useState("");
+  const [contents, setContents] = useState([]);
+
+  const token = localStorage.getItem("token");
+
+  const fetchContents = async () => {
+    if (!token) return;
+    try {
+      const res = await axios.get("http://localhost:5000/api/v1/content", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.data.success) {
+        setContents(res.data.data);
+        console.log("Sample tag:", res.data.data[1]);
+      }
+    } catch (error) {
+      console.error("Error fetching contents:", error);
+    }
+  };
 
   useEffect(() => {
     const storedData = localStorage.getItem("userInfo");
-
     if (storedData) {
       const userInfo = JSON.parse(storedData);
       const capitalized =
         userInfo.userName.charAt(0).toUpperCase() + userInfo.userName.slice(1);
       setName(capitalized);
     }
-     else {
-      console.log("No user info found");
-    }
-  
-   
-  }, [])
-  
-  
+    fetchContents();
+  }, []);
+
   const openModal = () => {
     setShowModal(true);
     setTimeout(() => setAnimateModal(true), 50);
   };
-  
+
   const closeModal = () => {
     setAnimateModal(false);
     setTimeout(() => setShowModal(false), 300);
   };
 
   return (
-    <div className="relative h-screen overflow-hidden bg-gray-200">
+    <div className="relative min-h-screen overflow-hidden bg-gray-200">
       {/* Sidebar */}
       <div className="fixed top-0 left-0 w-64 h-full bg-gray-100 shadow-lg z-30">
         <Sidebar />
@@ -53,13 +66,12 @@ const Dashboard = () => {
               animateModal ? "opacity-70" : "opacity-0"
             }`}
           />
-
           <div
             className={`fixed top-0 left-0 w-full h-screen flex justify-center items-center z-50 transform transition-all duration-300 ${
               animateModal ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
-            <AddContent onClose={closeModal} />
+            <AddContent onClose={closeModal} refreshContents={fetchContents} />
           </div>
         </>
       )}
@@ -80,32 +92,29 @@ const Dashboard = () => {
       </div>
 
       {/* All Notes */}
-      <h1 className="ml-64 pl-12 text-2xl font-bold">Welcome Back, {name} — Here’s Your Digital Brain</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 ml-64 ">
-        <Card
-          title="hello"
-          icon={<PlusIcon />}
-          type="youtube"
-          link="https://youtu.be/c2M-rlkkT5o?si=I3vAUiVbDlU5pH9N"
-        />
-        <Card
-          title="namstey"
-          icon={<ShareIcon />}
-          type="youtube"
-          link="https://youtu.be/jO9DaqRG6vg?si=eEY0PhEivsW-uCKw"
-        />
-        <Card
-          title="twitter post"
-          icon={<ShareIcon />}
-          type="twitter"
-          link="https://twitter.com/elonmusk/status/1234567890"
-        />
-        <Card
-          title="twitter post"
-          icon={<ShareIcon />}
-          type="twitter"
-          link="https://x.com/narendramodi/status/1948622470996517077"
-        />
+      <h1 className="ml-64 pl-12 text-2xl font-bold">
+        Welcome Back, {name} — Here’s Your Digital Brain
+      </h1>
+      <div className="flex flex-wrap  gap-6 p-4 ml-64">
+        {contents.map((content: any) => (
+          <div
+            key={content._id}
+           
+          >
+            <Card
+              id={content._id}
+              title={content.title}
+              type={content.type}
+              link={content.link}
+              tags={content.tag?.map((t: any) => t.title) || []}
+              createdAt={content.createdAt}
+              icon={<ShareIcon />}
+              onDelete={(deletedId) =>
+                setContents((prev) => prev.filter((c) => c._id !== deletedId))
+              }
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

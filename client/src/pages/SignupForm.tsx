@@ -2,7 +2,7 @@ import { useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { FaUser } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 const SignupForm = () => {
@@ -25,11 +25,11 @@ const SignupForm = () => {
     e.preventDefault();
     setError("");
     console.log(formData.username);
-    
+
     try {
       const response = await axios.post("http://localhost:5000/api/v1/signup", {
-        userName: formData.username, 
-        password: formData.password
+        userName: formData.username,
+        password: formData.password,
       });
 
       console.log("User created:", response.data.data);
@@ -81,14 +81,21 @@ const SignupForm = () => {
             </div>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center mb-4">
             <Button
               text="Sign Up"
               varient="primary"
               startIcon={<FaUser />}
-              // no onClick – form handles submission
             />
           </div>
+
+          {/* Already have account link */}
+          <p className="text-sm text-center">
+            Already have an account?{" "}
+            <Link to="/signin" className="text-blue-600 hover:underline">
+              Sign in
+            </Link>
+          </p>
         </form>
       </div>
     </div>

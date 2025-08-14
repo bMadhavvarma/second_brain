@@ -1,28 +1,53 @@
 import { useState } from "react";
+import axios from "axios";
 import Input from "./Input";
 import CloseIcon from "../Icons/CloseIcon";
 
 interface AddContentProps {
   onClose: () => void;
+  refreshContents: () => void;
 }
 
-const AddContent = ({ onClose }: AddContentProps) => {
+const AddContent = ({ onClose, refreshContents }: AddContentProps) => {
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
   const [type, setType] = useState("");
   const [tags, setTags] = useState("");
 
-  const handleAddContent = () => {
-    const contentData = { title, link, type, tags };
-    console.log("Added Content:", contentData);
-
-    // Optional: Clear inputs
-    setTitle("");
-    setLink("");
-    setType("");
-    setTags("");
+  const handleAddContent = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in");
+      return;
+    }
+  
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/content",
+        {
+          title,
+          link,
+          type,
+          tags: tags.split(",").map((t) => t.trim()),
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+  
+      if (res.data.success) {
+        refreshContents();
+        onClose();
+        setTitle("");
+        setLink("");
+        setType("");
+        setTags("");
+      }
+    } catch (error) {
+      console.error("Error adding content:", error);
+    }
   };
-
+  
   return (
     <div className="bg-white w-[30rem] h-fit rounded-2xl p-6 shadow-xl">
       <div className="flex justify-end mb-4">
@@ -32,8 +57,8 @@ const AddContent = ({ onClose }: AddContentProps) => {
       </div>
 
       <Input label="Title" placeholder="Enter title" value={title} onChange={setTitle} />
-      <Input label="Link" placeholder="Enter link" value={link} onChange={setLink} />
-      <Input label="Type" placeholder="e.g. YouTube, Twitter" value={type} onChange={setType} />
+      <Input label="Link" placeholder="Enter link or Notes" value={link} onChange={setLink} />
+      <Input label="Type" placeholder="e.g. video, note" value={type} onChange={setType} />
       <Input label="Tags" placeholder="Comma-separated tags" value={tags} onChange={setTags} />
 
       <button
