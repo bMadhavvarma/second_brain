@@ -1,8 +1,13 @@
 import axios from "axios";
 import { useState, type ReactElement, useEffect } from "react";
 import ShareIcon from "./../Icons/ShareIcon";
-
 import TrashIcon from "../Icons/TrashIcon";
+
+declare global {
+  interface Window {
+    twttr?: any;
+  }
+}
 
 interface CardProps {
   id: string;
@@ -31,10 +36,18 @@ const Card = ({
 }: CardProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
+  const [tweetLoading, setTweetLoading] = useState(type === "twitter");
 
   useEffect(() => {
-    console.log("CreatedAt debug:", createdAt);
-  }, [createdAt]);
+    if (type === "twitter" && window.twttr) {
+      setTweetLoading(true);
+      window.twttr.ready(() => {
+        window.twttr.widgets.load();
+        // Small delay to simulate loading
+        setTimeout(() => setTweetLoading(false), 1000);
+      });
+    }
+  }, [type, link]);
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
@@ -46,7 +59,7 @@ const Card = ({
 
     try {
       setIsDeleting(true);
-      setFadeOut(true); // trigger animation
+      setFadeOut(true);
 
       setTimeout(async () => {
         const res = await axios.delete(
@@ -60,7 +73,7 @@ const Card = ({
           alert(res.data.message || "Failed to delete content");
         }
         setIsDeleting(false);
-      }, 300); // match animation duration
+      }, 300);
     } catch (error) {
       console.error("Error deleting content:", error);
       setIsDeleting(false);
@@ -86,17 +99,19 @@ const Card = ({
           <button className="text-gray-400 hover:text-blue-500 transition-colors">
             {actionIcon ?? <ShareIcon />}
           </button>
-          <button
-            onClick={handleDelete}
-            disabled={isDeleting}
-            className="text-gray-400 hover:text-red-500 transition-colors"
-          >
-            {deleteIcon ?? <TrashIcon />}
-          </button>
+          {onDelete && (
+            <button
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="text-gray-400 hover:text-red-500 transition-colors"
+            >
+              {deleteIcon ?? <TrashIcon />}
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Content area */}
+      {/* Content */}
       <div
         className="
           flex-1 overflow-hidden hover:overflow-y-auto 
@@ -117,9 +132,21 @@ const Card = ({
         )}
 
         {type === "twitter" && link && (
-          <blockquote className="twitter-tweet">
-            <a href={link.replace("x.com", "twitter.com")}></a>
-          </blockquote>
+          <>
+            {tweetLoading && (
+              <div className="animate-pulse space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-3 bg-gray-200 rounded w-full"></div>
+                <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-48 bg-gray-200 rounded"></div>
+              </div>
+            )}
+            <blockquote
+              className={`twitter-tweet ${tweetLoading ? "hidden" : "block"}`}
+            >
+              <a href={link.replace("x.com", "twitter.com")}></a>
+            </blockquote>
+          </>
         )}
 
         {type === "note" && (
@@ -127,7 +154,7 @@ const Card = ({
         )}
       </div>
 
-      {/* Bottom section */}
+      {/* Footer */}
       <div className="mt-3">
         {createdAt && (
           <p className="text-xs text-gray-400 mb-2">

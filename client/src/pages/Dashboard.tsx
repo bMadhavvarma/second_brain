@@ -6,12 +6,15 @@ import Card from "../components/Card";
 import PlusIcon from "../Icons/PlusIcon";
 import ShareIcon from "../Icons/ShareIcon";
 import Sidebar from "../components/Sidebar";
+import ShareComponent from "../components/ShareComponent";
 
 const Dashboard = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
   const [name, setName] = useState("");
   const [contents, setContents] = useState([]);
+  const [shareUrl, setShareUrl] = useState(""); // NEW
 
   const token = localStorage.getItem("token");
 
@@ -23,7 +26,6 @@ const Dashboard = () => {
       });
       if (res.data.success) {
         setContents(res.data.data);
-        console.log("Sample tag:", res.data.data[1]);
       }
     } catch (error) {
       console.error("Error fetching contents:", error);
@@ -51,14 +53,39 @@ const Dashboard = () => {
     setTimeout(() => setShowModal(false), 300);
   };
 
+  const openShare = async () => {
+    if (!token) return;
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/brain/share",
+        { share: true },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.data.hash) {
+        const fullUrl = `${window.location.origin}/brain/${res.data.hash}`;
+        setShareUrl(fullUrl);
+        setShowShare(true);
+        setTimeout(() => setAnimateModal(true), 50);
+      }
+    } catch (error) {
+      console.error("Error generating share link:", error);
+    }
+  };
+
+  const closeShare = () => {
+    setAnimateModal(false);
+    setTimeout(() => setShowShare(false), 300);
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gray-200">
       {/* Sidebar */}
       <div className="fixed top-0 left-0 w-64 h-full bg-gray-100 shadow-lg z-30">
-        <Sidebar />
+      <Sidebar showLogout={true} />
+
       </div>
 
-      {/* Overlay + Modal */}
+      {/* AddContent Modal */}
       {showModal && (
         <>
           <div
@@ -76,6 +103,24 @@ const Dashboard = () => {
         </>
       )}
 
+      {/* Share Modal */}
+      {showShare && shareUrl && (
+        <>
+          <div
+            className={`fixed top-0 left-0 w-full h-screen bg-black z-40 transition-opacity duration-300 ${
+              animateModal ? "opacity-70" : "opacity-0"
+            }`}
+          />
+          <div
+            className={`fixed top-0 left-0 w-full h-screen flex justify-center items-center z-50 transform transition-all duration-300 ${
+              animateModal ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            }`}
+          >
+            <ShareComponent onClose={closeShare} shareUrl={shareUrl} />
+          </div>
+        </>
+      )}
+
       {/* Top Buttons */}
       <div className="ml-64 flex justify-end gap-2 p-4">
         <Button
@@ -88,6 +133,7 @@ const Dashboard = () => {
           text="Share brain"
           varient="secondary"
           startIcon={<ShareIcon />}
+          onClick={openShare}
         />
       </div>
 
@@ -95,25 +141,21 @@ const Dashboard = () => {
       <h1 className="ml-64 pl-12 text-2xl font-bold">
         Welcome Back, {name} — Here’s Your Digital Brain
       </h1>
-      <div className="flex flex-wrap  gap-6 p-4 ml-64">
+      <div className="flex flex-wrap gap-6 p-4 ml-64">
         {contents.map((content: any) => (
-          <div
+          <Card
             key={content._id}
-           
-          >
-            <Card
-              id={content._id}
-              title={content.title}
-              type={content.type}
-              link={content.link}
-              tags={content.tag?.map((t: any) => t.title) || []}
-              createdAt={content.createdAt}
-              icon={<ShareIcon />}
-              onDelete={(deletedId) =>
-                setContents((prev) => prev.filter((c) => c._id !== deletedId))
-              }
-            />
-          </div>
+            id={content._id}
+            title={content.title}
+            type={content.type}
+            link={content.link}
+            tags={content.tag?.map((t: any) => t.title) || []}
+            createdAt={content.createdAt}
+            icon={<ShareIcon />}
+            onDelete={(deletedId) =>
+              setContents((prev) => prev.filter((c) => c._id !== deletedId))
+            }
+          />
         ))}
       </div>
     </div>

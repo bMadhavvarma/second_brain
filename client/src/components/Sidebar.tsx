@@ -3,7 +3,11 @@ import SidebarItem from "./SidebarItem";
 import { FaTwitter, FaYoutube, FaFileAlt, FaLink, FaHashtag } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 
-const Sidebar = () => {
+interface SidebarProps {
+  showLogout?: boolean; // new prop
+}
+
+const Sidebar = ({ showLogout = true }: SidebarProps) => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userInfo");
@@ -27,15 +31,17 @@ const Sidebar = () => {
       </div>
 
       {/* Bottom logout */}
-      <div className="border-t border-gray-200 pt-4 mt-4">
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 text-red-600 hover:text-red-800 font-medium"
-        >
-          <FiLogOut size={18} />
-          Logout
-        </button>
-      </div>
+      {showLogout && (
+        <div className="border-t border-gray-200 pt-4 mt-4">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-red-600 hover:text-red-800 font-medium"
+          >
+            <FiLogOut size={18} />
+            Logout
+          </button>
+        </div>
+      )}
     </div>
   );
 };
