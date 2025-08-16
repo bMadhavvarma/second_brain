@@ -37,7 +37,8 @@ const Card = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
   const [tweetLoading, setTweetLoading] = useState(type === "twitter");
-
+  
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
   useEffect(() => {
     if (type === "twitter" && window.twttr) {
       setTweetLoading(true);
@@ -63,7 +64,7 @@ const Card = ({
 
       setTimeout(async () => {
         const res = await axios.delete(
-          `http://localhost:5000/api/v1/content/${id}`,
+          `${BACKEND_URL}/api/v1/content/${id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

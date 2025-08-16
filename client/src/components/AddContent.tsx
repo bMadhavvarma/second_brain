@@ -20,10 +20,10 @@ const AddContent = ({ onClose, refreshContents }: AddContentProps) => {
       alert("You must be logged in");
       return;
     }
-  
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/v1/content",
+        `${BACKEND_URL}/api/v1/content`,
         {
           title,
           link,

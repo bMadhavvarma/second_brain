@@ -17,11 +17,11 @@ const Dashboard = () => {
   const [shareUrl, setShareUrl] = useState(""); // NEW
 
   const token = localStorage.getItem("token");
-
+ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
   const fetchContents = async () => {
     if (!token) return;
     try {
-      const res = await axios.get("http://localhost:5000/api/v1/content", {
+      const res = await axios.get(`${BACKEND_URL}/api/v1/content`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.success) {
@@ -57,7 +57,7 @@ const Dashboard = () => {
     if (!token) return;
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/v1/brain/share",
+        `${BACKEND_URL}/api/v1/brain/share`,
         { share: true },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -7,15 +7,15 @@ import ShareIcon from "../Icons/ShareIcon";
 
 const PublicBrain = () => {
   const { shareLink } = useParams();
-  const [brainData, setBrainData] = useState<any>(null);
-
+  const [brainData, setBrainData] = useState<unknown>(null);
+ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
   useEffect(() => {
     if (!shareLink) return;
     axios
-      .get(`http://localhost:5000/api/v1/brain/${shareLink}`)
+      .get(`${BACKEND_URL}/api/v1/brain/${shareLink}`)
       .then((res) => setBrainData(res.data))
       .catch((err) => console.error(err));
-  }, [shareLink]);
+  }, [BACKEND_URL, shareLink]);
 
   if (!brainData) return <p>Loading shared brain...</p>;
 
