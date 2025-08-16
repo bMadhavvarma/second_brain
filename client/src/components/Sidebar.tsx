@@ -1,6 +1,6 @@
 import BrainIcon from "../Icons/BrainIcon";
 import SidebarItem from "./SidebarItem";
-import { FaTwitter, FaYoutube, FaFileAlt, FaLink, FaHashtag } from "react-icons/fa";
+import { FaTwitter, FaYoutube, FaLink, FaHashtag } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 
 interface SidebarProps {
@@ -25,7 +25,7 @@ const Sidebar = ({ showLogout = true }: SidebarProps) => {
 
         <SidebarItem icon={<FaTwitter />} label="Tweets" />
         <SidebarItem icon={<FaYoutube />} label="Videos" />
-        <SidebarItem icon={<FaFileAlt />} label="Documents" />
+       
         <SidebarItem icon={<FaLink />} label="Links" />
         <SidebarItem icon={<FaHashtag />} label="Tags" />
       </div>

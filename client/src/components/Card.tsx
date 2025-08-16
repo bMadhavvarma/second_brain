@@ -152,6 +152,23 @@ const Card = ({
         {type === "note" && (
           <p className="text-gray-700 whitespace-pre-wrap">{link}</p>
         )}
+  {!["video", "twitter", "note"].includes(type ?? "") && link && (
+  <a
+    href={link}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex flex-col items-center justify-center h-48 border rounded-md bg-gray-50 hover:bg-gray-100 transition text-center p-4"
+  >
+    <span className="text-4xl mb-2">🔗</span>
+    <p className="text-sm font-semibold text-gray-700">
+      {new URL(link).hostname}
+    </p>
+    <p className="text-xs text-blue-600 mt-1 break-all line-clamp-2">
+      {link}
+    </p>
+  </a>
+)}
+
       </div>
 
       {/* Footer */}

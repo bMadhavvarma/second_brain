@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import User from "./User";
 
-const contentType = ['image','note', 'video', 'audio', 'article', 'youtube', 'twitter', 'facebook',];
+const contentType = ['image','note', 'video', 'audio', 'article', 'youtube', 'twitter', 'facebook','link',];
 
 const ContentSchema = new mongoose.Schema({
   title: {
