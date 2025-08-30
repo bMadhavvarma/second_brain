@@ -38,7 +38,6 @@ Frontend (client/.env)
 
 VITE_BACKEND_URL=http://localhost:5000
 
-
 Backend (server/.env)
 
 MONGO_URL=your-mongodb-url
@@ -52,13 +51,13 @@ JWT_SECRET=supersecretkey123
 
 Start the backend:
 
-cd server
+cd server 
 npm run dev
 
 
 Start the frontend:
 
-cd client
+cd client 
 npm run dev
 
 
