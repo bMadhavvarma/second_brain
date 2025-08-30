@@ -36,7 +36,7 @@ SECOND BRAIN
 1. Clone the repo
 git clone https://github.com/bMadhavvarma/second_brain
 
-cd second-brain
+2. cd second-brain
 
 3. Install dependencies
 
