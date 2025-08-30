@@ -17,6 +17,7 @@ Share your whole “brain” with others
 
 Built fully with TypeScript + MERN stack
 
+
 📂 Project Structure
 SECOND BRAIN
 ├── client      # Frontend (React + TypeScript + Vite)
