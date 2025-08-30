@@ -19,17 +19,20 @@ Built fully with TypeScript + MERN stack
 
 ⚙️ Setup Instructions
 1. Clone the repo
-git clone https://github.com/bMadhavvarma/second_brain
+2. git clone https://github.com/bMadhavvarma/second_brain
 
-2. cd second-brain
+3. cd second-brain
 
-3. Install dependencies
+4. Install dependencies
 
 For both client and server:
 
-cd client
+cd client 
+
 npm install
+
 cd ../server
+
 npm install
 
 3. Setup environment variables
@@ -41,7 +44,9 @@ VITE_BACKEND_URL=http://localhost:5000
 Backend (server/.env)
 
 MONGO_URL=your-mongodb-url
+
 PORT=5000
+
 JWT_SECRET=supersecretkey123
 
 
@@ -52,12 +57,14 @@ JWT_SECRET=supersecretkey123
 Start the backend:
 
 cd server 
+
 npm run dev
 
 
 Start the frontend:
 
 cd client 
+
 npm run dev
 
 
