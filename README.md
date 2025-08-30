@@ -17,22 +17,6 @@ Share your whole “brain” with others
 
 Built fully with TypeScript + MERN stack
 
-
-📂 Project Structure
-SECOND BRAIN
-├── client      # Frontend (React + TypeScript + Vite)
-│   ├── public
-│   └── src
-│   └── .env
-├── server      # Backend (Node.js + Express + MongoDB + TypeScript)
-│   ├── src
-│   │   ├── config
-│   │   ├── middlewares
-│   │   ├── models
-│   │   ├── routes
-│   │   └── utils
-│   └── .env
-
 ⚙️ Setup Instructions
 1. Clone the repo
 git clone https://github.com/bMadhavvarma/second_brain
